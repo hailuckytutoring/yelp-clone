@@ -1,0 +1,3 @@
+
+export const BUSINESS_SEARCH = "BUSINESS_SEARCH";
+export const GET_REVIEWS = "GET_REVIEWS";
