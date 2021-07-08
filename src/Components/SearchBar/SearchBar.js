@@ -22,11 +22,13 @@ const SearchBar = () => {
   const { items, getBusinessSearch } = context;
 
   const [term, setTerm] = useState("");
-  const [location, setLocation] = useState("San Francisco,CA ");
+  const [location, setLocation] = useState([]);
+  const [initialLocation, setinitialLocation] = useState("San Francisco,CA");
+
   const [results, setResults] = useState([]);
 
   useEffect(() => {
-    getBusinessSearch(term, location);
+    // getBusinessSearch(term, initialLocation);
   }, []);
 
   const onSubmit = (e) => {
@@ -34,7 +36,9 @@ const SearchBar = () => {
     getBusinessSearch(term, location);
     setResults(items);
   };
+  if (!items) return <div></div>;
 
+  // console.log(initialLocation);
   return (
     <SearchBarContainer>
       <SearchUnitOne onSubmit={onSubmit}>
@@ -60,3 +64,4 @@ const SearchBar = () => {
 };
 
 export default SearchBar;
+

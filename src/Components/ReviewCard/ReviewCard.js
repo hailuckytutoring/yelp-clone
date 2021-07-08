@@ -33,6 +33,7 @@ truly a Tampa treasure`;
 const ReviewCard = () => {
   const [showInfo, setShowInfo] = useState(false);
   const [rating, setRating] = useState(3);
+  const [reviewId, setReviewId] = useState([]);
 
   const context = useContext(MainContext);
 
@@ -44,130 +45,89 @@ const ReviewCard = () => {
   // const randomNumber = Math.round(Math.random() * 5);
 
   useEffect(() => {
-    // getReviews("wGl_DyNxSv8KUtYgiuLhmA");
-    // getReviews("WavvLdfdP6g8aZTtbBQHTw");
-    // getReviews("ri7UUYmx21AgSpRsf4-9QA");
-  }, []);
+    if (items) {
+      setReviewId(
+        items.slice(0, 3).map((keys) => {
+          return keys.id;
+        })
+      );
+    } else {
+      return undefined;
+    }
+  }, [items]);
 
-  console.log(items);
+  useEffect(() => {
+    getReviews(reviewId[1]);
+  }, [reviewId]);
 
-  // useEffect(() => {
-  //   setRating(randomNumber);
-  // }, [randomNumber]);
+  const isReviewCard = () => {
+    setShowInfo(!showInfo);
+  };
 
-  // console.log(randomNumber);
-
+  if (!items && !reviews) return <div></div>;
   return (
     <>
       <TitleContainer>
         <HeaderTileMain>Recent Activity</HeaderTileMain>
       </TitleContainer>
+
       <CardWrapper>
-        <CardContainer>
-          <CardTitleContainer>
-            <CardTitle>Steve L.</CardTitle>
-            <CardSubTitle>Wrote a review</CardSubTitle>
-          </CardTitleContainer>
-          <ImageContainer>
-            <ImageMain />
-          </ImageContainer>
-          <ResNameTitleContainer>
-            <ResNameTitle>Armature Works</ResNameTitle>
-          </ResNameTitleContainer>
-          <RatingContainer>
-            {[...Array(5)].map((star, i) => {
-              const ratingValue = i + 1;
+        {reviews &&
+          reviews.map((items, i) => (
+            <CardContainer>
+              <CardTitleContainer>
+                <CardTitle>{items.user.name}</CardTitle>
+                <CardSubTitle>Wrote a review</CardSubTitle>
+              </CardTitleContainer>
+              <ImageContainer>
+                <ImageMain />
+              </ImageContainer>
+              <ResNameTitleContainer>
+                <ResNameTitle>Armature Works</ResNameTitle>
+              </ResNameTitleContainer>
+              <RatingContainer>
+                {[...Array(5)].map((star, i) => {
+                  const ratingValue = items.rating;
 
-              return (
-                <StarIcon
-                  value={rating}
-                  size={20}
-                  color={ratingValue <= rating ? "#d22424" : " #D9D9D9"}
-                />
-              );
-            })}
-          </RatingContainer>
+                  return (
+                    <StarIcon
+                      value={rating}
+                      size={20}
+                      color={ratingValue <= rating ? "#d22424" : " #D9D9D9"}
+                    />
+                  );
+                })}
+              </RatingContainer>
 
-          <ReviewParagraphContainer>
-            <ParaGraphMain>
-              {showInfo ? sampleText : `${sampleText.substring(0, 110)}`}
-            </ParaGraphMain>
-            <ReadButton onClick={() => setShowInfo(!showInfo)}>
-              Continue reading
-            </ReadButton>
-          </ReviewParagraphContainer>
-        </CardContainer>
-        <CardContainer>
-          <CardTitleContainer>
-            <CardTitle>Steve L.</CardTitle>
-            <CardSubTitle>Wrote a review</CardSubTitle>
-          </CardTitleContainer>
-          <ImageContainer>
-            <ImageMain />
-          </ImageContainer>
-          <ResNameTitleContainer>
-            <ResNameTitle>Armature Works</ResNameTitle>
-          </ResNameTitleContainer>
-          <RatingContainer>
-            {[...Array(5)].map((star, i) => {
-              const ratingValue = i + 1;
+              <ReviewParagraphContainer>
+                <ParaGraphMain>
+                  {showInfo ? items.text : `${items.text.substring(0, 110)}`}
+                </ParaGraphMain>
 
-              return (
-                <StarIcon
-                  value={rating}
-                  size={20}
-                  color={ratingValue <= rating ? "#d22424" : " #D9D9D9"}
-                />
-              );
-            })}
-          </RatingContainer>
-
-          <ReviewParagraphContainer>
-            <ParaGraphMain>
-              {showInfo ? sampleText : `${sampleText.substring(0, 110)}`}
-            </ParaGraphMain>
-            <ReadButton onClick={() => setShowInfo(!showInfo)}>
-              Continue reading
-            </ReadButton>
-          </ReviewParagraphContainer>
-        </CardContainer>
-        <CardContainer>
-          <CardTitleContainer>
-            <CardTitle>Steve L.</CardTitle>
-            <CardSubTitle>Wrote a review</CardSubTitle>
-          </CardTitleContainer>
-          <ImageContainer>
-            <ImageMain />
-          </ImageContainer>
-          <ResNameTitleContainer>
-            <ResNameTitle>Armature Works</ResNameTitle>
-          </ResNameTitleContainer>
-          <RatingContainer>
-            {[...Array(5)].map((star, i) => {
-              const ratingValue = i + 1;
-
-              return (
-                <StarIcon
-                  value={rating}
-                  size={20}
-                  color={ratingValue <= rating ? "#d22424" : " #D9D9D9"}
-                />
-              );
-            })}
-          </RatingContainer>
-
-          <ReviewParagraphContainer>
-            <ParaGraphMain>
-              {showInfo ? sampleText : `${sampleText.substring(0, 110)}`}
-            </ParaGraphMain>
-            <ReadButton onClick={() => setShowInfo(!showInfo)}>
-              Continue reading
-            </ReadButton>
-          </ReviewParagraphContainer>
-        </CardContainer>
+                <ReadButton onClick={() => setShowInfo(!showInfo, i)}>
+                  Continue reading
+                </ReadButton>
+              </ReviewParagraphContainer>
+            </CardContainer>
+          ))}
       </CardWrapper>
     </>
   );
 };
 
 export default ReviewCard;
+
+// console.log(items);
+// const idArray = [];
+// const ids = () => {
+//   reviewId.slice(0, 3).map((i) => {
+//     console.log(i.id);
+//   });
+// };
+// ids();
+
+// useEffect(() => {
+//   setRating(randomNumber);
+// }, [randomNumber]);
+
+// console.log(randomNumber);

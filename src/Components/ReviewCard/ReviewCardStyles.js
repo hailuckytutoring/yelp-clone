@@ -7,7 +7,7 @@ export const CardWrapper = styled.div`
   max-width: 990px;
   margin: 5px auto;
   padding: 0 15px;
-  /* background-color: lightseagreen; */
+  background-color: lightseagreen;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
@@ -86,9 +86,7 @@ export const ReviewParagraphContainer = styled.div`
   text-align: left;
 `;
 
-export const ParaGraphMain = styled.p`
-  text-overflow: ellipsis;
-`;
+export const ParaGraphMain = styled.p``;
 
 export const ReadButton = styled.button`
   color: #0073bb;

@@ -29,7 +29,7 @@ const MainProvider = (props) => {
         headerAuth
       );
 
-      dispatch({ type: BUSINESS_SEARCH, payload: res.data });
+      dispatch({ type: BUSINESS_SEARCH, payload: res.data.businesses });
     } catch (error) {
       console.log(error);
     }
@@ -41,7 +41,7 @@ const MainProvider = (props) => {
         `https://mycorsproxybypass.herokuapp.com/https://api.yelp.com/v3/businesses/${id}/reviews`,
         headerAuth
       );
-      dispatch({ type: GET_REVIEWS, payload: res.data });
+      dispatch({ type: GET_REVIEWS, payload: res.data.reviews });
     } catch (error) {
       console.log(error);
     }
