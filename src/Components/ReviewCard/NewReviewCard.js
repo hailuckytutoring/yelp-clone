@@ -21,49 +21,41 @@ import {
   HeaderTileMain,
 } from "./ReviewCardStyles";
 
-const NewReviewCard = ({ item, main }) => {
+const NewReviewCard = ({ item, attr, data }) => {
   const [showInfo, setShowInfo] = useState(false);
-
-  const context = useContext(MainContext);
-
-  const { items } = context;
 
   const toggleHide = (index) => {
     setShowInfo({ ...showInfo, [index]: !showInfo[index] });
   };
+  if (!item) return <div></div>;
 
   return (
     <>
       <>
-        {item &&
-          item.slice(0, 1).map((items, i) => (
-            <CardContainer>
-              <CardTitleContainer>
-                <CardTitle>{items.user.name}</CardTitle>
-                <div>{items.url}</div>
-                <CardSubTitle>Wrote a review</CardSubTitle>
-              </CardTitleContainer>
+        <CardContainer>
+          <div></div>
 
-              <ImageContainer>
-                <ImageMain />
-              </ImageContainer>
-              <ResNameTitleContainer>
-                <ResNameTitle>name</ResNameTitle>
-              </ResNameTitleContainer>
+          <ResNameTitleContainer>
+            <ResNameTitle>{attr.name}</ResNameTitle>
+          </ResNameTitleContainer>
 
-              <ReviewParagraphContainer key={i}>
-                <ParaGraphMain key={items.id}>
-                  {!!showInfo[i] && showInfo
-                    ? items.text
-                    : `${items.text.slice(0, 100)}`}
-                </ParaGraphMain>
+          <ReviewParagraphContainer>
+            <ParaGraphMain>
+              <div>{}</div>
+              {/* {revItems &&
+                    revItems
+                      .slice(0, 1)
+                      .map((item) => <div>{item.review}</div>)} */}
+              {/* {!!showInfo[i] && showInfo
+                    ? revItems[0].text
+                    : `${revItems[0].text.slice(0, 100)}`} */}
+            </ParaGraphMain>
 
-                <ReadButton onClick={() => toggleHide(i)}>
-                  {showInfo[i] ? "Read less" : "Continue reading"}
-                </ReadButton>
-              </ReviewParagraphContainer>
-            </CardContainer>
-          ))}
+            <ReadButton onClick={() => toggleHide()}>
+              {showInfo ? "Read less" : "Continue reading"}
+            </ReadButton>
+          </ReviewParagraphContainer>
+        </CardContainer>
       </>
     </>
   );

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import MainContext from "../../Context/MainContext";
+
+import { useQuery, gql } from "@apollo/client";
 import NewReviewCard from "./NewReviewCard";
 import styled from "styled-components";
-
-import { request, GraphQLClient, gql } from "graphql-request";
 
 const CardWrapper = styled.div`
   display: flex;
@@ -20,167 +20,79 @@ const CardWrapper = styled.div`
 const ReviewCardMap = () => {
   const context = useContext(MainContext);
 
-  const { getReviews, reviews, items } = context;
-
   const [reviewId, setReviewId] = useState([]);
-  const [data, setData] = useState([]);
+  const [newArry, setNewArry] = useState([]);
+
+  const { items } = context;
 
   useEffect(() => {
-    if (items) {
-      setReviewId(
-        items.slice(0, 3).map((keys) => {
-          return keys.id;
-        })
-      );
-    } else {
-      return undefined;
-    }
-  }, []);
-  const endpoint =
-    "https://mycorsproxybypass.herokuapp.com/https://api.yelp.com/v3/graphql";
+    const idItems = items.slice(0, 3).map((keys) => {
+      return keys.id;
+    });
+    setReviewId(idItems);
+  }, [items]);
 
-  const variables = {
-    business: "WavvLdfdP6g8aZTtbBQHTw",
-    business2: "WavvLdfdP6g8aZTtbBQHTw",
+  let qVars = {
+    business: reviewId[0], // <===Replace with ids passed to state
+    business2: reviewId[1],
   };
 
-  const GET_REVIEWS = gql`
-        query GET_REVIEWS($business: {String!},$business2: {String!}) {
-          reviews(business: $business) {
-            total
-            review {
-              text
-            }
-          }
-          
+  console.log(reviewId)
+
+  const REVIEWS_FETCH = gql`
+    query GET_REVIEWS($business: String!, $business2: String!) {
+      Review_1: reviews(business: $business) {
+        total
+        id
+        review {
+          text
+          rating
         }
+      }
+      Review_2: reviews(business: $business2) {
+        total
+        id
 
-        query GET_REVIEWS($business2: {String!} {
-            reviews2(business: $business2) {
-              total
-              review {
-                text
-              }
-            }
-            
-          }
-      `;
+        review {
+          text
+          rating
+        }
+      }
+    }
+  `;
 
-  const client = new GraphQLClient(endpoint, {
-    headers: {
-      headers: {
-        authorization:
-          "Bearer mnle5EXoFYtyyMzH3dsFwpbf90dzZb8qfnVABxz6L4FA2kcP8Tj7TiWexYdU_ILiMb-I8Ll5uDenDgtKfGxF5F9YUhAOmGpzHiHrXkcomyxcpv6GCNGdIUCveEjSYHYx",
-      },
-    },
+  const reviewItems =
+    items &&
+    items.slice(0, 3).map((items) => {
+      return items;
+    });
+
+  const { error, loading, data } = useQuery(REVIEWS_FETCH, {
+    variables: qVars,
   });
-  client.request(GET_REVIEWS, variables).then((data) => console.log(data));
 
-  //   async function main() {
-  //     const endpoint =
-  //       "https://mycorsproxybypass.herokuapp.com/https://api.yelp.com/v3/graphql";
+  let result =
+    data &&
+    items &&
+    Object.entries(data).map(([k, v]) => ({
+      a: reviewItems,
+      label: k,
+      review: v.review[0].text,
+    }));
 
-  //     const variables = {
-  //       business: "WavvLdfdP6g8aZTtbBQHTw",
-  //     };
+  useEffect(() => {
+    setNewArry(data);
+  }, []);
 
-  //     const data = await request(endpoint, GET_REVIEWS, variables);
-  //     console.log(JSON.stringify(data, undefined, 2));
+  console.log(newArry);
 
-  //     console.log(data);
-  //   }
-
-  //   main().catch((error) => console.error(error));
-
-  //   const datas = GraphQLClient.request(GET_REVIEWS, variables);
-
-  //   console.log(JSON.stringify(datas, undefined, 2));
-
-  //   const mutatio = gql`
-  //       {
-  //         review_1: reviews(business: {reviewId[0]}) {
-  //           total
-  //           review {
-  //             text
-  //           }
-  //         }
-  //         review_2: reviews(business: "WavvLdfdP6g8aZTtbBQHTw") {
-  //           total
-  //           review {
-  //             text
-  //           }
-  //         }
-
-  //         review_3: reviews(business: "WavvLdfdP6g8aZTtbBQHTw") {
-  //           total
-  //           review {
-  //             text
-  //           }
-  //         }
-  //       }
-  //     `;
-
-  //   const mutation = gql`
-  //     mutation AddMovie($title: String!, $releaseDate: Int!) {
-  //       insert_movies_one(object: { title: $title, releaseDate: $releaseDate }) {
-  //         title
-  //         releaseDate
-  //       }
-  //     }
-  //   `;
-
-  //   let API_KEY =
-  //     "mnle5EXoFYtyyMzH3dsFwpbf90dzZb8qfnVABxz6L4FA2kcP8Tj7TiWexYdU_ILiMb-I8Ll5uDenDgtKfGxF5F9YUhAOmGpzHiHrXkcomyxcpv6GCNGdIUCveEjSYHYx";
-  //   let endpoint =
-  //     "https://mycorsproxybypass.herokuapp.com/https://api.yelp.com/v3/graphql";
-
-  //   const client = new GraphQLClient(endpoint, {
-  //     headers: {
-  //       Authorization: `Bearer ${API_KEY}`,
-  //       "Content-Type": "application/json",
-  //       "accept-language": "en_US",
-  //     },
-  //   });
-
-  //   client.request(query).then((data) => console.log(data));
-  //   const variables = {
-  //     title: "Inception",
-  //     releaseDate: 2010,
-  //   };
-  //   const datas = await graphQLClient.request(mutation, variables);
-
-  //   console.log(data.review_1);
-
-  if (!data) return <div></div>;
   return (
     <>
       <CardWrapper>
-        <NewReviewCard item={data} />
+        {/* <div>{newArry && newArry.map((items) => <div>{items}</div>)}</div> */}
       </CardWrapper>
     </>
   );
 };
 
 export default ReviewCardMap;
-
-//   console.log(reviews[0]);
-
-//   const rev = (i) => {
-//     Object.values(i).map((key) => {
-//       console.log(key[0]);
-//       return key[0];
-//     });
-//   };
-//   rev(data);
-
-//wGl_DyNxSv8KUtYgiuLhmA WavvLdfdP6g8aZTtbBQHTw
-
-//   const keys = (i) => {
-//     Object.values(i)
-//       .slice(0, 3)
-//       .map((i) => {
-//         console.log(i);
-//         return i;
-//       });
-//   };
-//   keys(items);

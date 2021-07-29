@@ -25,11 +25,7 @@ const SearchBar = () => {
   const [location, setLocation] = useState([]);
   const [initialLocation, setinitialLocation] = useState("San Francisco,CA");
 
-  const [results, setResults] = useState([]);
-
-  useEffect(() => {
-    // getBusinessSearch(term, initialLocation);
-  }, []);
+  const [setResults] = useState([]);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -64,4 +60,3 @@ const SearchBar = () => {
 };
 
 export default SearchBar;
-
