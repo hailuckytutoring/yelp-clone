@@ -14,7 +14,11 @@ const ReviewCardMap = ({ data }) => {
     }
   }, [data]);
   const REVIEWS_FETCH = gql`
-    query GET_REVIEWS($business: String!, $business2: String!) {
+    query GET_REVIEWS(
+      $business: String!
+      $business2: String!
+      $business3: String!
+    ) {
       Review_1: reviews(business: $business) {
         review {
           id
@@ -29,12 +33,20 @@ const ReviewCardMap = ({ data }) => {
           rating
         }
       }
+      Review_3: reviews(business: $business3) {
+        review {
+          id
+          text
+          rating
+        }
+      }
     }
   `;
 
   let qVariables = {
     business: dataDetails[0] && dataDetails[0].id,
     business2: dataDetails[1] && dataDetails[1].id,
+    business3: dataDetails[2] && dataDetails[2].id,
   };
 
   const location_details = useQuery(REVIEWS_FETCH, {
@@ -52,8 +64,8 @@ const ReviewCardMap = ({ data }) => {
       id: v.review[0].id,
     }));
 
-  // console.log(results);
-  // console.log(dataDetails);
+  console.log(results);
+  console.log(dataDetails);
 
   if (!location_details.data) return <div></div>;
   return (

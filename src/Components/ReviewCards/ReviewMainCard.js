@@ -17,6 +17,7 @@ const ReviewMainCard = () => {
   `;
 
   const location_data = useQuery(LOCATION_FETCH);
+  console.log("locatioon data", location_data);
 
   if (!location_data) return <div></div>;
   return (
